@@ -1,0 +1,67 @@
+version: '3.0'
+
+services:
+  identity-manager:
+    container_name: identity-manager
+    build: 
+      context: .
+      dockerfile: identity-manager/Dockerfile
+    ports:
+      - "10022:10022"
+      - "10000:10000"
+      - "5051:5051"
+    command: bash -c "./deploy.sh && java -jar libs/identitymanager.jar --config-file identity-manager.conf"
+    volumes:
+      - ./identity-manager:/opt/corda/identity-manager
+
+  notary: 
+    container_name: notary
+    build:
+      context: .
+      dockerfile: notary/Dockerfile
+    ports:
+      - "12001:12001"
+      - "60101:60101"
+      - "60102:60102"
+      - "60103:60103"
+      - "60100:60100"
+    command: bash -c "java -jar libs/corda.jar --initial-registration --network-root-truststore-password trustpass --network-root-truststore trust-stores/network-root-truststore.jks"
+    volumes: 
+    - ./notary:/opt/corda/notary
+    - ./identity-manager/trust-stores:/opt/corda/notary/trust-stores
+    depends_on: 
+    - identity-manager
+
+  network-map:
+    build:
+      context: .
+      dockerfile: network-map/Dockerfile
+    ports:
+      - "20000:20000"
+    volumes:
+      - ./network-map:/opt/corda/network-map
+      - ./identity-manager/trust-stores:/opt/corda/network-map/trust-stores
+      - ./identity-manager/key-stores:/opt/corda/network-map/key-stores
+      - ./notary/additional-node-infos:/opt/corda/network-map/notary-info
+    command: > 
+        bash -c "java -jar libs/networkmap.jar --config-file network-map.conf --set-network-parameters network-parameters.conf --network-truststore trust-stores/network-root-truststore.jks --truststore-password trustpass --root-alias cordarootca
+        && java -jar libs/networkmap.jar --config-file network-map.conf"
+    depends_on: 
+      - identity-manager
+      - notary
+  
+  node01: 
+    build:
+      context: .
+      dockerfile: node01/Dockerfile
+    ports:
+      - "61100:61100"
+      - "61101:61101"
+    volumes:
+      - ./node01:/opt/corda/node01
+      - ./identity-manager/trust-stores:/opt/corda/node01/trust-stores
+      - ./identity-manager/key-stores:/opt/corda/node01/key-stores
+    command: java -jar libs/corda.jar --initial-registration --network-root-truststore-password trustpass --network-root-truststore trust-stores/network-root-truststore.jks
+    depends_on: 
+      - identity-manager
+      - network-map
