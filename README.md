@@ -46,7 +46,7 @@ You will need the following files:
 
 First of all, you need to clone this template to your local machine:
 
-`git clone https://github.com/sbir3japan/cenm-docker-demo.git`
+`git clone https://github.com/alebaffa/cenm-docker-demo.git`
 
 Under the root are four directories, each corresponding to the entities to be created:
 
