@@ -1,0 +1,2 @@
+#!/bin/bash
+java -jar zone.jar --enm-listener-port=5061 --url="jdbc:h2:file:./zone-persistence;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=10000;WRITE_DELAY=0;AUTO_SERVER_PORT=0" --user=testuser --password=password --admin-listener-port=5063 --driver-class-name=org.h2.Driver --auth-host=auth-service --auth-port=8081 --auth-trust-store-location=certificates/corda-ssl-trust-store.jks --auth-trust-store-password=trustpass --auth-issuer=accounts-service --auth-leeway=10 --run-migration=true

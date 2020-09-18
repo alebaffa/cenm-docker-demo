@@ -8,7 +8,6 @@ services:
       dockerfile: auth/Dockerfile
     ports:
       - "8081:8081"
-    command: java -jar accounts-application.jar --config-file auth.conf --keep-running
     volumes:
       - ./auth:/opt/corda/auth
 
@@ -20,7 +19,6 @@ services:
     ports:
       - "5061:5061"
       - "5063:5063"
-    command: java -jar zone.jar --enm-listener-port=5061 --url="jdbc:h2:file:./zone-persistence;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=10000;WRITE_DELAY=0;AUTO_SERVER_PORT=0" --user=testuser --password=password --admin-listener-port=5063 --driver-class-name=org.h2.Driver --auth-host=auth-service --auth-port=8081 --auth-trust-store-location=certificates/corda-ssl-trust-store.jks --auth-trust-store-password=trustpass --auth-issuer=accounts-service --auth-leeway=10 --run-migration=true
     volumes:
       - ./auth:/opt/corda/auth
 
@@ -31,7 +29,6 @@ services:
       dockerfile: farm/Dockerfile
     ports:
       - "8080:8080"
-    command: java -jar farm-application.jar -f farm.conf
     volumes:
       - ./farm:/opt/corda/farm 
 
@@ -40,7 +37,6 @@ services:
     build: 
       context: .
       dockerfile: angel/Dockerfile
-    command: java -jar angel.jar --zone-host zone --zone-port 5063 --token topsecret --service IDENTITY_MANAGER
     volumes:
       - ./angel:/opt/corda/angel 
 
@@ -53,7 +49,6 @@ services:
       - "10022:10022"
       - "10000:10000"
       - "5051:5051"
-    command: bash -c "./deploy.sh && java -jar libs/identitymanager.jar --config-file identity-manager.conf"
     volumes:
       - ./identity-manager:/opt/corda/identity-manager
 
@@ -68,7 +63,6 @@ services:
       - "60102:60102"
       - "60103:60103"
       - "60100:60100"
-    command: bash -c "java -jar libs/corda.jar --initial-registration --network-root-truststore-password trustpass --network-root-truststore trust-stores/network-root-truststore.jks"
     volumes: 
     - ./notary:/opt/corda/notary
     - ./identity-manager/trust-stores:/opt/corda/notary/trust-stores
@@ -76,6 +70,7 @@ services:
     - identity-manager
 
   network-map:
+    container_name: network-map
     build:
       context: .
       dockerfile: network-map/Dockerfile
@@ -86,9 +81,6 @@ services:
       - ./identity-manager/trust-stores:/opt/corda/network-map/trust-stores
       - ./identity-manager/key-stores:/opt/corda/network-map/key-stores
       - ./notary/additional-node-infos:/opt/corda/network-map/notary-info
-    command: > 
-        bash -c "java -jar libs/networkmap.jar --config-file network-map.conf --set-network-parameters network-parameters.conf --network-truststore trust-stores/network-root-truststore.jks --truststore-password trustpass --root-alias cordarootca
-        && java -jar libs/networkmap.jar --config-file network-map.conf"
     depends_on: 
       - identity-manager
       - notary
@@ -104,7 +96,6 @@ services:
       - ./node01:/opt/corda/node01
       - ./identity-manager/trust-stores:/opt/corda/node01/trust-stores
       - ./identity-manager/key-stores:/opt/corda/node01/key-stores
-    command: java -jar libs/corda.jar --initial-registration --network-root-truststore-password trustpass --network-root-truststore trust-stores/network-root-truststore.jks
     depends_on: 
       - identity-manager
       - network-map

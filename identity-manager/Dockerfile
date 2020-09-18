@@ -7,3 +7,5 @@ WORKDIR /opt/corda/identity-manager
 VOLUME [ "/opt/corda/identity-manager" ]
 
 EXPOSE 10022 10000 5051
+
+CMD [ "./start.sh" ]

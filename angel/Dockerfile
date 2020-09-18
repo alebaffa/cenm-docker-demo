@@ -5,3 +5,5 @@ ADD ./angel /opt/corda/angel
 WORKDIR /opt/corda/angel
 
 VOLUME [ "/opt/corda/angel" ]
+
+CMD [ "./start.sh" ]

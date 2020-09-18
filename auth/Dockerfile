@@ -7,3 +7,5 @@ WORKDIR /opt/corda/auth
 VOLUME [ "/opt/corda/auth" ]
 
 EXPOSE 8081
+
+CMD [ "./start.sh" ]

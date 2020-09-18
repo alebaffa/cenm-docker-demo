@@ -7,3 +7,5 @@ WORKDIR /opt/corda/node01
 VOLUME [ "/opt/corda/node01" ]
 
 EXPOSE 61100 61101
+
+CMD [ "./start.sh" ]

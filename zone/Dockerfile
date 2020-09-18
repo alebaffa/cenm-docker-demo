@@ -7,3 +7,5 @@ WORKDIR /opt/corda/zone
 VOLUME [ "/opt/corda/zone" ]
 
 EXPOSE 5061 5063
+
+CMD [ "./start.sh" ]

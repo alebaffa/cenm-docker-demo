@@ -7,3 +7,5 @@ WORKDIR /opt/corda/notary
 VOLUME [ "/opt/corda/notary" ]
     
 EXPOSE 60100 60101 60102 60103 12001
+
+CMD [ "./start.sh" ]

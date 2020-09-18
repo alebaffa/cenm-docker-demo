@@ -7,3 +7,5 @@ WORKDIR /opt/corda/farm
 VOLUME [ "/opt/corda/farm" ]
 
 EXPOSE 8080
+
+CMD [ "./start.sh" ]

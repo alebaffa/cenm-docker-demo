@@ -1,0 +1,2 @@
+#!/bin/bash
+java -jar libs/networkmap.jar --config-file network-map.conf --set-network-parameters network-parameters.conf --network-truststore trust-stores/network-root-truststore.jks --truststore-password trustpass --root-alias cordarootca && java -jar libs/networkmap.jar --config-file network-map.conf
