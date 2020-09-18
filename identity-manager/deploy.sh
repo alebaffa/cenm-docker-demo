@@ -5,13 +5,7 @@
 
 #Pick PKI configuration file
  
-if [ "$1" == "--crl" ]; then
-	cp ./pki-generation-crl.conf ./pki-generation.conf
-	java -jar libs/pkitool.jar --config-file pki-generation.conf
-else
-	cp ./pki-generation-no-crl.conf ./pki-generation.conf
-	java -jar libs/pkitool.jar -f pki-generation.conf --ignore-missing-crl
-fi
+java -jar libs/pkitool.jar -f pki-generation.conf --ignore-missing-crl
 
 echo "Generated the PKI."
 

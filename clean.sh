@@ -8,4 +8,8 @@ cd identity-manager && rm -rf key-stores logs shell-commands ssh trust-stores *.
 cd ../network-map && rm -rf logs shell-commands ssh *.db
 cd ../node01 && rm -rf brokers additional-node-infos artemis broker certificates cordapps djvm logs shell-commands ssh network-parameters nodeInfo* *.db process-id
 cd ../notary && rm -rf brokers additional-node-infos artemis broker certificates cordapps djvm logs shell-commands ssh network-parameters nodeInfo* *.db process-id
+cd ../angel && rm -rf logs 
+cd ../auth && rm -rf logs 
+cd ../farm && rm -rf logs 
+cd ../zone && rm -rf logs 
 echo "Artifacts cleaned up!"
