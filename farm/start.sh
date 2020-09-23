@@ -1,2 +1,2 @@
 #!/bin/bash
-java -jar farm-application.jar -f farm.conf
+java -jar libs/farm-application.jar -f farm.conf

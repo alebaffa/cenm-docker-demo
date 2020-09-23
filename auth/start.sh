@@ -1,2 +1,2 @@
 #!/bin/bash
-java -jar accounts-application.jar --config-file auth.conf --keep-running
+java -jar libs/accounts-application.jar --config-file auth.conf --keep-running
